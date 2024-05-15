@@ -1,0 +1,14 @@
+<p>galeria works!</p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let ilustracion of ilustraciones">
+      <div class="card mb-4 shadow-sm h-100">
+        <img src="http://localhost:8080/api/uploads/img/{{ilustracion.imagen}}" class="card-img-top" alt="{{ilustracion.imagen}}" 
+        style="width:100%; height:100%; object-fit: cover; cursor:pointer;"
+        data-toggle="tooltip" [title]="ilustracion.titulo" data-html="true" data-class="tooltip-custom">
+        
+      </div>
+    </div>
+  </div>
+</div>

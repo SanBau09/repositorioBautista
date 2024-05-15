@@ -1,0 +1,62 @@
+<p>form-ilustracion works!</p>
+
+<ul class="alert alert-danger" *ngIf="errores?.length > 0">
+    <li *ngFor="let err of errores">
+        {{ err }}
+    </li>
+</ul>
+
+<div class="card bg-dark text-white">
+    <div class="card-header">{{ titulo }}</div>
+    <div class="card-body">
+        <form #ilustracionForm="ngForm">
+            <div class="form-group row">
+                <label for="nombre" class="col-form-label col-sm-2">Título</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="ilustracion.titulo" name="titulo" #titulo="ngModel"><!-- required minlength="4" -->
+                    <div class="alert alert-danger" *ngIf="titulo.invalid && (titulo.dirty || titulo.touched)">
+                        <div *ngIf="titulo.errors.required">
+                            Título es requerido
+                        </div>
+                        <div *ngIf="titulo.errors.minlength">
+                            El título debe tener al menos 4 letras
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="pais" class="col-form-label col-sm-2">Categoría</label>
+                <div class="col-sm-6">
+                    <select [compareWith]="compararCategoria" class="form-control" [(ngModel)]="ilustracion.categorias" name="categoria" ><!-- required -->
+                        <option [ngValue]="undefined">--- selecciona una categoría ---</option>
+                        <option *ngFor="let categoria of categorias" [ngValue]="categoria">{{categoria.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="input-group">
+                    <input (change)="seleccionarFoto($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+            
+                    <button class="btn btn-primary" type="button" id="inputGroupFileAddon04" (click)="create()"  [disabled]="!fotoSeleccionada && !ilustracionForm.form.valid" *ngIf="!ilustracion.id else elseBlock">Crear</button>
+                
+                    <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)="update()" [disabled]="!ilustracionForm.form.valid">Editar</button>
+                    </ng-template>
+                </div>
+
+                <div *ngIf="progreso > 0" class="progress" role="progressbar" aria-label="Info striped example" attr.aria-valuenow="{{progreso}}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped bg-info" [ngStyle]="{width:progreso+ '%'}">
+                    {{progreso}}%
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+</div>

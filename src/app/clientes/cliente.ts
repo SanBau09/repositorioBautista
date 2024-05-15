@@ -1,3 +1,5 @@
+import { Pais } from "./pais";
+
 export class Cliente {
 
     id:number;
@@ -5,4 +7,6 @@ export class Cliente {
     apellidos: string;
     fecha: string;
     email: string;
+    foto: string;
+    pais: Pais;
 }
