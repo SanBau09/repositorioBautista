@@ -25,6 +25,8 @@ import { LoginComponent } from './usuarios/login.component';
 import { AboutMeComponent } from './about-me/about-me.component';
 import { GaleriaComponent } from './galeria/galeria.component';
 import { FormIlustracionComponent } from './galeria/form-ilustracion/form-ilustracion.component';
+import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 
@@ -32,7 +34,7 @@ import { FormIlustracionComponent } from './galeria/form-ilustracion/form-ilustr
 registerLocaleData(localeES, 'es');
 
 const ROUTES: Routes = [
-  {path: '', redirectTo: '/clientes', pathMatch: 'full'},
+  {path: '', redirectTo: '/galeria/ilustraciones', pathMatch: 'full'}, //index 
   {path: 'clientes', component: ClientesComponent},
   {path: 'clientes/page/:page', component: ClientesComponent},
   {path: 'clientes/form', component: FormComponent},
@@ -65,7 +67,9 @@ const ROUTES: Routes = [
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(ROUTES),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    DialogModule,
+    CheckboxModule
   ],
   providers: [ClienteService, GaleriaService, {provide: LOCALE_ID, useValue: 'es'}],
   bootstrap: [AppComponent]

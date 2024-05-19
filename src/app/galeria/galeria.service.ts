@@ -86,6 +86,21 @@ export class GaleriaService{
       );
     }
 
+    eliminarIlustracion(id: number): Observable<Ilustracion>{
+      return this.http.delete<Ilustracion>(` ${this.urlEndPoint}/ilustraciones/${id}`, {headers: this.agregarAuthorizationHeader()}).pipe(
+        catchError(e=> {
+  
+          if(this.isNoAutorizado(e)){
+            return throwError(()=>e);
+          }
+  
+          console.error(e.error.mensaje);
+          swal('Error al eliminar', e.error.mensaje, 'error');
+          return throwError(()=>e);
+        })
+      )
+    }
+
 
     getCategorias(): Observable<Categoria[]>{
       return this.http.get<Categoria[]>(this.urlEndPoint + '/categorias', {headers: this.agregarAuthorizationHeader()}).pipe(
@@ -97,6 +112,25 @@ export class GaleriaService{
       );
     }
 
+    createCategoria(categoria: Categoria) : Observable<Categoria> {
+      return this.http.post(this.urlEndPoint + "/categorias", categoria, {headers:this.agregarAuthorizationHeader()}).pipe(
+        map( (response : any) => response.categoria as Categoria),
+        catchError(e=> {
+  
+          if(this.isNoAutorizado(e)){
+            return throwError(()=>e);
+          }
+  
+          if(e.status==400){
+            return throwError(()=>e);
+          }
+  
+          console.error(e.error.mensaje);
+          swal(e.error.mensaje, e.error.error, 'error');
+          return throwError(()=>e);
+        })
+      );
+    }
 
 
     /*subirFoto(archivo: File, id): Observable<HttpEvent<{}>>{

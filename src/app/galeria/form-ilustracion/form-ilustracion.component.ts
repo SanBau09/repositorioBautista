@@ -18,13 +18,17 @@ export class FormIlustracionComponent implements OnInit{
 
   fotoSeleccionada: File;
   progreso:number = 0;
+  categoriaSeleccionada: Categoria;
+
+  displayActivationDialog: boolean = false;     // Variable para controlar la visibilidad del diálogo de crear categoría
+  nuevaCategoria: Categoria = null;
 
   public errores: string[];
 
   constructor(private galeriaService: GaleriaService, private router: Router, private activatedRoute: ActivatedRoute){}
 
   ngOnInit(){
-    this.galeriaService.getCategorias().subscribe(categorias => this.categorias = categorias);
+    this.galeriaService.getCategorias().subscribe(categorias => this.categorias = categorias.filter(categoria => categoria.esGaleria));  // Filtrar categorías);
   }
 
   seleccionarFoto(event){  //nos aseguramos que el archivo sea de tipo imagen
@@ -54,7 +58,7 @@ export class FormIlustracionComponent implements OnInit{
     if(!this.fotoSeleccionada){
       swal('Error Upload: ', 'Debe seleccionar una foto', 'error');
     }else{
-      this.ilustracion.categorias = this.categorias;
+      this.ilustracion.categorias = [this.categoriaSeleccionada]; // Assign only the selected category
       this.galeriaService.create(this.ilustracion, this.fotoSeleccionada).subscribe({
         next:
           ilustracion => {
@@ -66,6 +70,25 @@ export class FormIlustracionComponent implements OnInit{
               console.error('Código del error desde el backend: ' + err.status);}
       });
     }
+  }
+
+  createCategoria(): void{
+    this.galeriaService.createCategoria(this.nuevaCategoria).subscribe({
+      next:
+        categoria => {
+          this.displayActivationDialog = false;
+          this.galeriaService.getCategorias().subscribe(categorias => this.categorias = categorias.filter(categoria => categoria.esGaleria));  // Filtrar categorías);
+          swal('Nueva categoría', `La categoría ${categoria.nombre} ha sido creada con éxito`, 'success');},
+        error:
+          err => {
+            this.errores = err.error.errors as string[];
+            console.error('Código del error desde el backend: ' + err.status);}
+    });
+  }
+
+  mostrarPDialogCategoria(): void{
+    this.displayActivationDialog = true; // Mostrar el diálogo
+    this.nuevaCategoria = new Categoria();
   }
 /*
   subirFoto(){ //nos aseguramos que el archivo sea de tipo imagen

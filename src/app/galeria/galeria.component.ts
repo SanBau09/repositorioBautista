@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ilustracion } from './ilustracion';
 import { GaleriaService } from './galeria.service';
 import { AuthService } from '../usuarios/auth.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-galeria',
@@ -31,6 +32,29 @@ export class GaleriaComponent implements OnInit{
     );
   }
 
+  eliminarIlustracion(ilustracion: Ilustracion) : void {
+    swal({
+      title: "Estás seguro?",
+      text: `¿Desea borrar la ilustración ${ilustracion.titulo} ?`,
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminalo!"
+    }).then((result) => {
+      if (result.value) {
+
+        this.galeriaService.eliminarIlustracion(ilustracion.id).subscribe(
+          response => {
+            this.ilustraciones = this.ilustraciones.filter(ilu => ilu !== ilustracion);
+            swal(
+              'Ilustración Eliminada!',
+              `Ilustración ${ilustracion.titulo} eliminada con éxito`,
+              'success');
+            });
+          }
+    });
+  }
   
 
 }

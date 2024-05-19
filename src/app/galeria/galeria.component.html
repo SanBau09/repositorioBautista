@@ -7,6 +7,14 @@
         <img src="http://localhost:8080/api/uploads/img/{{ilustracion.imagen}}" class="card-img-top" alt="{{ilustracion.imagen}}" 
         style="width:100%; height:100%; object-fit: cover; cursor:pointer;"
         data-toggle="tooltip" [title]="ilustracion.titulo" data-html="true" data-class="tooltip-custom">
+
+        <div *ngIf="authService.hasRol('ROLE_ADMIN')"  class="card-body">
+          <h5 class="card-title">{{ilustracion.titulo}}</h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <button class="btn btn-primary" (click)="editarIlustracion(ilustracion)">Editar</button>
+            <button class="btn btn-danger" (click)="eliminarIlustracion(ilustracion)">Eliminar</button>
+          </div>
+        </div>
         
       </div>
     </div>
